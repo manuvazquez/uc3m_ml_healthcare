@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "uc3m_ml_healthcare"
+  site-url: "https://manuvazquez.github.io/uc3m_ml_healthcare"
+  description: "Machine Learning in Healthcare Course"
+  repo-branch: main
+  repo-url: "https://github.com/manuvazquez/uc3m_ml_healthcare"
