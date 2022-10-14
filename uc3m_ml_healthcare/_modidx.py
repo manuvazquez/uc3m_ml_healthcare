@@ -5,4 +5,6 @@ d = { 'settings': { 'branch': 'main',
                 'doc_host': 'https://manuvazquez.github.io',
                 'git_url': 'https://github.com/manuvazquez/uc3m_ml_healthcare',
                 'lib_path': 'uc3m_ml_healthcare'},
-  'syms': {'uc3m_ml_healthcare.core': {'uc3m_ml_healthcare.core.foo': ('core.html#foo', 'uc3m_ml_healthcare/core.py')}}}
+  'syms': { 'uc3m_ml_healthcare.core': {'uc3m_ml_healthcare.core.foo': ('core.html#foo', 'uc3m_ml_healthcare/core.py')},
+            'uc3m_ml_healthcare.data': { 'uc3m_ml_healthcare.data.make_periodic_dataset': ( 'data.html#make_periodic_dataset',
+                                                                                            'uc3m_ml_healthcare/data.py')}}}
