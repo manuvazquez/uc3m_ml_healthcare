@@ -6,14 +6,15 @@ uc3m_ml_healthcare
 This file will become your README and also the index of your
 documentation.
 
-The library includes two files from [Rubanova’s
-implementation](https://github.com/YuliaRubanova/latent_ode) of the
-paper [Latent ODEs for Irregularly-Sampled Time
-Series](https://arxiv.org/abs/1907.03907):
+The library includes the file
+[generate_timeseries.py](uc3m_ml_healthcare/generate_timeseries.py) from
+[Rubanova’s implementation](https://github.com/YuliaRubanova/latent_ode)
+of the paper [Latent ODEs for Irregularly-Sampled Time
+Series](https://arxiv.org/abs/1907.03907) with two minor modifications:
 
-- [generate_timeseries.py](uc3m_ml_healthcare/generate_timeseries.py)
+- commented out the *unnecessary* line `import lib.utils as utils`
 
-  - commented out the *unnecessary* line `import lib.utils as utils`
+- commented out all the *matplotlib* stuff
 
 ## Install
 

@@ -61,14 +61,18 @@ class CollateFunction:
     
     def __init__(self,
                  time: torch.Tensor, # Time axis [time]
-                 n_points_to_subsample: int # Number of points to be "subsampled"
+                 n_points_to_subsample: int | None = None # Number of points to be "subsampled"
                 ):
         
         self.time = time
-        self.n_points_to_subsample = n_points_to_subsample
         
         self._n_time_instants = len(time)
         self._half_n_time_instants: int = self._n_time_instants // 2
+        
+        if n_points_to_subsample is None:
+            self.n_points_to_subsample = self._half_n_time_instants
+        else:
+            self.n_points_to_subsample = n_points_to_subsample
         
     def __call__(self,
                  batch: list # Observations [batch]
@@ -124,7 +128,7 @@ class CollateFunction:
         
         self.time = self.time.to(device=device)
 
-# %% ../nbs/10_data.ipynb 31
+# %% ../nbs/10_data.ipynb 32
 @patch
 def to(self: CollateFunction, device):
     
