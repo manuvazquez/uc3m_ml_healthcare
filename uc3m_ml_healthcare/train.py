@@ -34,7 +34,8 @@ class LatentODELoss:
         target: torch.Tensor, # Targets [batch, time, feature]
         target_mask: torch.BoolTensor, # Targets [batch, time, feature]
         kl_weight: float # KL divergence weight on the loss
-    ) -> tuple[torch.Tensor, dict]: # Loss and some extra info
+    # ) -> tuple[torch.Tensor, dict]: # Loss and some extra info # <-------------- Python 3.10
+    ): # Loss and some extra info
 
 
         # -------------- KL divergence

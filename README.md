@@ -9,9 +9,10 @@ Healthcare](https://aplicaciones.uc3m.es/cpa/generaFicha?est=350&asig=16803&idio
 course.
 
 It includes the file
-[generate_timeseries.py](uc3m_ml_healthcare/generate_timeseries.py) from
-[Rubanova’s implementation](https://github.com/YuliaRubanova/latent_ode)
-of the paper [Latent ODEs for Irregularly-Sampled Time
+[generate_timeseries.py](https://github.com/manuvazquez/uc3m_ml_healthcare/blob/01f109fecad99ecda28cf05d5269901f6f4dd9a1/uc3m_ml_healthcare/generate_timeseries.py)
+from [Rubanova’s
+implementation](https://github.com/YuliaRubanova/latent_ode) of the
+paper [Latent ODEs for Irregularly-Sampled Time
 Series](https://arxiv.org/abs/1907.03907) with two minor modifications:
 
 - commented out the unnecessary line `import lib.utils as utils`

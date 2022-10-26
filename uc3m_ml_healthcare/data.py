@@ -4,14 +4,10 @@
 __all__ = ['make_periodic_dataset', 'CollateFunction']
 
 # %% ../nbs/10_data.ipynb 3
-# import pathlib
-# import itertools
 import types
 
 from fastcore.utils import patch
 
-# import pandas as pd
-# import numpy as np
 import torch
 import torch.distributions
 from torch.distributions import uniform
@@ -26,7 +22,8 @@ def make_periodic_dataset(
     max_t: float, # Maximum value of time instants
     n: int, # Number of examples
     noise_weight: float # Standard deviation of the noise to be added
-) -> tuple[torch.Tensor, torch.Tensor]: # Time and observations
+): # Time and observations
+# ) -> tuple[torch.Tensor, torch.Tensor]: # Time and observations # <-------------- Python 3.10
     
     # so that we can use the original code "verbatim" (plus some comments)
     args = types.SimpleNamespace(timepoints=timepoints, extrap=extrap, max_t=max_t, n=n, noise_weight=noise_weight)
@@ -61,7 +58,8 @@ class CollateFunction:
     
     def __init__(self,
                  time: torch.Tensor, # Time axis [time]
-                 n_points_to_subsample: int | None = None # Number of points to be "subsampled"
+                 # n_points_to_subsample: int | None = None # Number of points to be "subsampled" # <-------------- Python 3.10
+                 n_points_to_subsample = None # Number of points to be "subsampled"
                 ):
         
         self.time = time
@@ -73,6 +71,9 @@ class CollateFunction:
             self.n_points_to_subsample = self._half_n_time_instants
         else:
             self.n_points_to_subsample = n_points_to_subsample
+            
+    
+    # TODO: drop time instants with no data (`get_next_batch` in Rubanova's code)
         
     def __call__(self,
                  batch: list # Observations [batch]
@@ -128,7 +129,7 @@ class CollateFunction:
         
         self.time = self.time.to(device=device)
 
-# %% ../nbs/10_data.ipynb 32
+# %% ../nbs/10_data.ipynb 31
 @patch
 def to(self: CollateFunction, device):
     
