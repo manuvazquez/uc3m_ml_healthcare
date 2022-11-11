@@ -1,0 +1,10 @@
+name: mlhlab
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3
+  - torchdiffeq
+  - pip
+  - pip:
+    - git+https://github.com/manuvazquez/uc3m_ml_healthcare@main

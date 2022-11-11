@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 # %% ../nbs/20_plot.ipynb 4
 sns.set_theme()
 
-# %% ../nbs/20_plot.ipynb 5
+# %% ../nbs/20_plot.ipynb 6
 def partially_observed_time_series(
     observed_t: torch.Tensor,
     observed_y: torch.Tensor,

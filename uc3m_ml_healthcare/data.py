@@ -15,7 +15,7 @@ from torch.distributions import uniform
 # from latent_ode.generate_timeseries import Periodic_1d
 from .generate_timeseries import Periodic_1d
 
-# %% ../nbs/10_data.ipynb 8
+# %% ../nbs/10_data.ipynb 6
 def make_periodic_dataset(
     timepoints: int, # Number of time instants
     extrap: bool, # Whether extrapolation is peformed
@@ -53,7 +53,7 @@ def make_periodic_dataset(
     
     return time_steps_extrap, dataset
 
-# %% ../nbs/10_data.ipynb 12
+# %% ../nbs/10_data.ipynb 10
 class CollateFunction:
     
     def __init__(self,
@@ -129,7 +129,7 @@ class CollateFunction:
         
         self.time = self.time.to(device=device)
 
-# %% ../nbs/10_data.ipynb 31
+# %% ../nbs/10_data.ipynb 29
 @patch
 def to(self: CollateFunction, device):
     
