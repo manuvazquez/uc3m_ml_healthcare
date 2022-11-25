@@ -120,7 +120,8 @@ class CollateFunction:
         
     def __str__(self):
         
-        return f'Collate function expecting {self._n_time_instants} time instants, subsampling {self.n_points_to_subsample}.'
+        return f'Collate function expecting time series of length {self._n_time_instants}, with the second half to be predicted from the first.'
+        # return f'Collate function expecting {self._n_time_instants} time instants, subsampling {self.n_points_to_subsample}.'
     
     # a object is represented by its string
     __repr__ = __str__
