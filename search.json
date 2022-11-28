@@ -1,0 +1,44 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "uc3m_ml_healthcare",
+    "section": "",
+    "text": "This library gathers some Python code meant to be used in the labs to be worked in Universidad Carlos III de Madrid Machine Learning in Healthcare course.\nIt includes the file generate_timeseries.py from Rubanova’s implementation of the paper Latent ODEs for Irregularly-Sampled Time Series with two minor modifications:"
+  },
+  {
+    "objectID": "index.html#install",
+    "href": "index.html#install",
+    "title": "uc3m_ml_healthcare",
+    "section": "Install",
+    "text": "Install\nThe package is not in PyPI but this should do\npip install git+https://github.com/manuvazquez/uc3m_ml_healthcare@main"
+  },
+  {
+    "objectID": "train.html",
+    "href": "train.html",
+    "title": "train",
+    "section": "",
+    "text": "A loss function meant to be used with Latent ODEs for Irregularly-Sampled Time Series’s LatentODE. Some modifications were applied:\n\na mask is required since the sparse observations are supported\nlikelihood is averaged over all the trials (rather than added across)\n\n\nsource\n\nLatentODELoss\n\n LatentODELoss (noise_std:torch.Tensor,\n                prior:torch.distributions.normal.Normal)\n\nA loss function meant to be paired with Rubanova’s LatentODE\n\n\n\n\n\n\n\n\n\nType\nDetails\n\n\n\n\nnoise_std\nTensor\nStandard deviation of the noise assumed when computing the likelihood\n\n\nprior\nNormal\nPrior distribution for the initial state\n\n\n\nWe need the prior distribution, on one hand, and the standard deviation of the noise, on the other,…\n\nprior = torch.distributions.normal.Normal(torch.tensor(0.0), torch.tensor(1.))\nnoise_std = torch.tensor(0.01)\n\nNameError: name 'torch' is not defined\n\n\n…to instantiate the class\n\nloss_func = LatentODELoss(noise_std, prior)\nloss_func\n\nLatentODELoss with:\n    noise standard deviation = 0.009999999776482582\n    prior: Normal(loc: 0.0, scale: 1.0)\n\n\nSome random data for testing purposes\n\nn_time_instants = 12\nn_trials = 3\nbatch_size = 32\nfeatures_size = 2\nlatent_size = 13\n\npred = torch.randn(n_time_instants, n_trials, batch_size, features_size)\nmean = torch.randn(1, batch_size, latent_size)\nstd = torch.rand_like(mean)\ntarget = torch.randn(batch_size, n_time_instants, features_size)\ntarget_mask = (torch.randn_like(target) > 0.).bool()\nkl_weight = 0.2\n\nThe loss function is applied\n\nloss_func(pred, mean, std, target, target_mask, kl_weight)\n\n(tensor(9830.3252), {'kl_average': tensor(1.2236), 'mse': tensor(2.0446)})"
+  },
+  {
+    "objectID": "plot.html",
+    "href": "plot.html",
+    "title": "plot",
+    "section": "",
+    "text": "A function to make a scatterplot, along with some marks along the horizontal axis.\n\nsource\n\npartially_observed_time_series\n\n partially_observed_time_series (observed_t:torch.Tensor,\n                                 observed_y:torch.Tensor,\n                                 to_predict_at_t:torch.Tensor)\n\nSome test data\n\nt = torch.distributions.uniform.Uniform(0., 5.).sample((10,))\nt = torch.sort(t)[0]\ny = torch.randn_like(t)\n\n\npartially_observed_time_series(t[:8], y[:8], t[8:]);"
+  },
+  {
+    "objectID": "data.html",
+    "href": "data.html",
+    "title": "data",
+    "section": "",
+    "text": "Except for the first and last lines, everything else comes from Rubanova’s implementation (comments mine)\n\nsource\n\n\n\n make_periodic_dataset (timepoints:int, extrap:bool, max_t:float, n:int,\n                        noise_weight:float)\n\n\n\n\n\nType\nDetails\n\n\n\n\ntimepoints\nint\nNumber of time instants\n\n\nextrap\nbool\nWhether extrapolation is peformed\n\n\nmax_t\nfloat\nMaximum value of time instants\n\n\nn\nint\nNumber of examples\n\n\nnoise_weight\nfloat\nStandard deviation of the noise to be added\n\n\n\n\ntime, observations = make_periodic_dataset(timepoints=100, extrap=True, max_t=5.0, n=200, noise_weight=0.01)\ntime.shape, observations.shape\n\n(torch.Size([101]), torch.Size([200, 101, 1]))"
+  },
+  {
+    "objectID": "data.html#pytorch",
+    "href": "data.html#pytorch",
+    "title": "data",
+    "section": "PyTorch",
+    "text": "PyTorch\nA class defining a (somehow complex) collate function for a PyTorch DataLoader\n\nsource\n\nCollateFunction\n\n CollateFunction (time:torch.Tensor, n_points_to_subsample=None)\n\nInitialize self. See help(type(self)) for accurate signature.\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\ntime\nTensor\n\nTime axis [time]\n\n\nn_points_to_subsample\nNoneType\nNone\nNumber of points to be “subsampled”\n\n\n\nLet us build an object for testing\n\ncollate_fn = CollateFunction(time, n_points_to_subsample=50)\ncollate_fn\n\nCollate function expecting time series of length 101, with the second half to be predicted from the first.\n\n\nWe also need a PyTorch DataLoader\n\ndataloader = torch.utils.data.DataLoader(observations, batch_size = 10, shuffle=False, collate_fn=collate_fn)\ndataloader\n\n<torch.utils.data.dataloader.DataLoader>\n\n\nHow many batches is this DataLoader providing?\n\nn_batches = len(dataloader)\nn_batches\n\n20\n\n\nLet us get the first batch\n\nbatch_bundle = next(iter(dataloader))\ntype(batch_bundle)\n\ndict\n\n\nNotice that, as seen from CollateFunction.__call__ function’s prototype, the type is returned is a dictionary. It contains the following fields\n\nprint(batch_bundle.keys())\n\ndict_keys(['observed_time', 'observed_data', 'to_predict_at_time', 'to_predict_data', 'observed_mask'])\n\n\n\nobserved_time and observed_data is the first part of a time series we want to learn, whereas\nto_predict_at_time, to_predict_data is the second part of the same time series we aim at predicting; on the other hand\nobserved_mask is True for every observation that is available (it only applies to the observed data)\n\nIf one must think of this in terms of an input, \\(x\\), that is given, and a related output, \\(y\\), that is to be predicted, the latter would be to_predict_data and the former would encompass the rest of the fields.\nWe can check the size of every component\n\nfor k, v in batch_bundle.items():\n    print(f'Dimensions of {k}: {tuple(v.shape)}')\n\nDimensions of observed_time: (50,)\nDimensions of observed_data: (10, 50, 1)\nDimensions of to_predict_at_time: (51,)\nDimensions of to_predict_data: (10, 51, 1)\nDimensions of observed_mask: (10, 50, 1)\n\n\nIn this simple example, every observatios is available\n\n(batch_bundle['observed_mask'] == 1.).all()\n\ntensor(True)\n\n\n\n\nGPU support\nIf one wants to move this object to another device, this function will do that for all the relevant internal state.\n\nsource\n\n\nCollateFunction.to\n\n CollateFunction.to (device)"
+  }
+]
